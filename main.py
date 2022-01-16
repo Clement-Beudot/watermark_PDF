@@ -6,8 +6,6 @@ OUTBOX = os.path.join("automatic", "outbox")
 SIGNATURE = "signature.pdf"
 
 
-files_list = []
-
 def add_watermark():
     for path, subdirs, files in os.walk(INBOX):
         for name in files:
@@ -25,8 +23,6 @@ def add_watermark():
             output_file = open(os.path.join(OUTBOX, name_str), "wb")
             out_content.write(output_file)
 
-
-            # fichier_brut.close()
             watermark_file.close()
             input_file.close()
             output_file.close()
@@ -35,6 +31,8 @@ def get_list():
     for path, subdirs, files in os.walk(INBOX):
         for name in files:
             files_list.append(name)
+
+
 
 files_list = []
 get_list()
