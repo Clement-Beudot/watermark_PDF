@@ -11,3 +11,9 @@ For the moment, you have to manually configure the path of the input folder, the
 Example (if the inbox path folder is /home/yourname/my_pdf/inbox )
 
 INBOX = os.path.join("home", "yourname", "my_pdf", "inbox")
+
+
+## CHANGELOG
+
+### 16/01/2022 : 
+- Initial version
