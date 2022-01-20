@@ -5,6 +5,14 @@ INBOX = "rien inbox" #os.path.join("automatic", "inbox")
 OUTBOX = "rien outbox" #os.path.join("automatic", "outbox")
 WATERMARK = "rien signature" #"signature.pdf"
 
+def check_config(config_dict):
+    for keys in config_dict:
+        if not os.path.exists(config_dict[keys]):
+            print("Error : \n", config_dict[keys], ": No such file or directory\n")
+            return False
+        else: 
+            return True
+
 
 def get_config():
     if os.path.exists("watermark.config"):
@@ -13,14 +21,14 @@ def get_config():
         
         config_dict = {}
         for element in config:
-            config_dict[element.split(":")[0]] = element.split(":")[1][:-1]
+            if element.split(":")[1][-4:] == ".pdf":
+                config_dict[element.split(":")[0]] = element.split(":")[1]
+            else: 
+                config_dict[element.split(":")[0]] = element.split(":")[1][:-1]
         global INBOX, OUTBOX, WATERMARK
         try : 
             INBOX, OUTBOX, WATERMARK = config_dict["INBOX"], config_dict["OUTBOX"], config_dict["WATERMARK"]
-            if "" in config_dict.values():
-                print("ERROR : There is someting wrong with the config file \"watermark.config\"")
-                print("At least one argument has no value.")
-                exit(0)
+            check_config(config_dict)
         except KeyError:
             print("ERROR : There is someting wrong with the config file \"watermark.config\"")
             if input("\nDo you want to refigure ? (Y)es / (S)top ").upper() == "Y" :
@@ -69,10 +77,10 @@ print(INBOX)
 print(OUTBOX)
 print(WATERMARK)
 
-get_list()
-print("You are about to edit", len(files_list), "file(s) : ")
-for i in files_list:
-    print("\t", i)
+# get_list()
+# print("You are about to edit", len(files_list), "file(s) : ")
+# for i in files_list:
+#     print("\t", i)
 
-if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
-    add_watermark()
+# if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
+#     add_watermark()
