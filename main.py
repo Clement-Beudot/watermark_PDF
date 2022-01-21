@@ -1,24 +1,34 @@
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import os.path
 
-INBOX = "rien inbox" #os.path.join("automatic", "inbox")
-OUTBOX = "rien outbox" #os.path.join("automatic", "outbox")
-WATERMARK = "rien signature" #"signature.pdf"
+INBOX = ""
+OUTBOX = ""
+WATERMARK = ""
+
+def set_config(): 
+    global INBOX, OUTBOX, WATERMARK
+    f = open("watermark.config", "w")
+    INBOX = input("Manually enter the path to the INBOX folder, or drag and drop it : ")
+    OUTBOX = input("Manually enter the path to the OUTBOX folder, or drag and drop it : ")
+    WATERMARK = input("Manually enter the path to the Watermark.pdf file, or drag and drop it : ")
+    settings = "INBOX:"+ INBOX.strip("'") + "\nOUTBOX:" + OUTBOX.strip("'") + "\nWATERMARK:" + WATERMARK.strip("'")
+    f.write(settings)
+    f.close()
+
+
 
 def check_config(config_dict):
     for keys in config_dict:
         if not os.path.exists(config_dict[keys]):
             print("Error : \n", config_dict[keys], ": No such file or directory\n")
             return False
-        else: 
-            return True
+    return True
 
 
 def get_config():
     if os.path.exists("watermark.config"):
         f = open("watermark.config", "r")
-        config = f.readlines()
-        
+        config = f.readlines()        
         config_dict = {}
         for element in config:
             if element.split(":")[1][-4:] == ".pdf":
@@ -32,13 +42,12 @@ def get_config():
         except KeyError:
             print("ERROR : There is someting wrong with the config file \"watermark.config\"")
             if input("\nDo you want to refigure ? (Y)es / (S)top ").upper() == "Y" :
-                print("reconfiguration")
+                set_config()
             else:
-                exit(0)
-
-        
+                exit(0) 
+        f.close()      
     else:
-        f = open("watermark.config", "w")
+        set_config()
     return config_dict
 
 
@@ -72,15 +81,12 @@ def get_list():
 
 
 files_list = []
-test = get_config()
-print(INBOX)
-print(OUTBOX)
-print(WATERMARK)
 
-# get_list()
-# print("You are about to edit", len(files_list), "file(s) : ")
-# for i in files_list:
-#     print("\t", i)
+get_config()
+get_list()
+print("You are about to edit", len(files_list), "file(s) : ")
+for i in files_list:
+    print("\t", i)
 
-# if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
-#     add_watermark()
+if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
+    add_watermark()
