@@ -6,14 +6,15 @@ Required : PyPDF2 :
 
 
 This script allows you to take all the PDFs in a folder and add a watermark (signature, logo) to the first page of each document.
-For the moment, you have to manually configure the path of the input folder, the output folder, and the path of the watermark file (in .pdf)
+For tthe first launch, you have to configure the path of the input folder, the output folder, and the path of the watermark file (in .pdf)
 
-Example (if the inbox path folder is /home/yourname/my_pdf/inbox )
-
-INBOX = os.path.join("home", "yourname", "my_pdf", "inbox")
 
 
 ## CHANGELOG
 
+### 22/01/2022 : 
+- Add config file, setup, check and get
+
 ### 16/01/2022 : 
 - Initial version
+
