@@ -1,9 +1,15 @@
 from PyPDF2 import PdfFileWriter, PdfFileReader
 import os.path
+import time
 
 INBOX = ""
 OUTBOX = ""
 WATERMARK = ""
+
+def launch_loop():
+    while True:
+        time.sleep(10)
+        add_watermark()
 
 def set_config(): 
     global INBOX, OUTBOX, WATERMARK
@@ -55,7 +61,7 @@ def get_config():
 def add_watermark():
     for path, subdirs, files in os.walk(INBOX):
         for name in files:
-            name_str = "sign_" + name
+            name_str = str(time.time()).split(".")[0]+ "_" + name
             out_content = PdfFileWriter()
             watermark_file , input_file = open(WATERMARK, "rb"), open(os.path.join(INBOX, name), "rb")
             watermark, input = PdfFileReader(watermark_file), PdfFileReader(input_file)
@@ -72,6 +78,7 @@ def add_watermark():
             watermark_file.close()
             input_file.close()
             output_file.close()
+            os.remove(os.path.join(INBOX, name))
 
 def get_list():
     for path, subdirs, files in os.walk(INBOX):
@@ -84,9 +91,12 @@ files_list = []
 
 get_config()
 get_list()
-print("You are about to edit", len(files_list), "file(s) : ")
-for i in files_list:
-    print("\t", i)
+# if len(files_list) != 0:
+#     print("You are about to edit", len(files_list), "file(s) : ")
+#     for i in files_list:
+#         print("\t", i)
 
-if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
-    add_watermark()
+#     if input("\nConfirm ? (Y)es / (N)o ").upper() == "Y" :
+#         add_watermark()
+
+launch_loop()
